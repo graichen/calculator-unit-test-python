@@ -1,0 +1,68 @@
+#!/usr/bin/env groovy
+
+pipeline {
+    agent {
+        node {
+            label 'windows'
+        }
+    }
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+    }
+
+    environment {
+        HTTP_PROXY="${HTTP_PROXY}"
+        HTTPS_PROXY="${HTTPS_PROXY}"
+        NO_PROXY="${NO_PROXY}"
+        SONAR_LOGIN_KEY = credentials('SONAR_LOGIN_KEY')
+    }
+
+    stages {
+
+        stage('Check env') {
+            steps {
+                bat 'set'
+                bat 'docker version'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                bat '"C:\\Program Files\\Docker\\Docker\\DockerCli.exe" -SwitchWindowsEngine'
+                bat 'docker run --rm -v %CD%:c:/workspace -w c:/workspace python:3.7-windowsservercore-ltsc2016 ' +
+                    'set PYTHONPATH=%CD%/src:%CD%/tests;' +
+                    ' pip install pytest; ' +
+                    ' pytest -v ' +
+                    ' --cov=. ' +
+                    ' --cov-config .coveragerc' +
+                    ' --junitxml=xunit-reports/xunit-result.xml' +
+                    ' --cov-report xml:coverage-reports/coverage.xml' +
+                    ' --rootdir=.'
+                bat '"C:\\Program Files\\Docker\\Docker\\DockerCli.exe" -SwitchLinuxEngine'
+            }
+        }
+    }
+//    post {
+//        unstable {
+//            mail to: "${env.CHANGE_AUTHOR_EMAIL}",
+//                    subject: "Unstable Pipeline: ${currentBuild.fullDisplayName}",
+//                    body: "Something is wrong with ${env.BUILD_URL}"
+//        }
+//        failure {
+//            mail to: "${env.CHANGE_AUTHOR_EMAIL}",
+//                    subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
+//                    body: "Something is wrong with ${env.BUILD_URL}"
+//        }
+//        aborted {
+//            mail to: "${env.CHANGE_AUTHOR_EMAIL}",
+//                    subject: "Aborted Pipeline: ${currentBuild.fullDisplayName}",
+//                    body: "Something is wrong with ${env.BUILD_URL}"
+//        }
+//        changed {
+//            mail to: "${env.CHANGE_AUTHOR_EMAIL}",
+//                    subject: "Changed Pipeline: ${currentBuild.fullDisplayName}",
+//                    body: "Something is changed with ${env.BUILD_URL}"
+//        }
+//    }
+}
