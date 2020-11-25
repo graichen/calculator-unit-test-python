@@ -30,15 +30,7 @@ pipeline {
         stage('Test') {
             steps {
                 bat '"C:\\Program Files\\Docker\\Docker\\DockerCli.exe" -SwitchWindowsEngine'
-                bat 'docker run --rm -v %CD%:c:/workspace -w c:/workspace python:3.7-windowsservercore-ltsc2016 ' +
-                    'set PYTHONPATH=%CD%/src:%CD%/tests;' +
-                    ' pip install pytest; ' +
-                    ' pytest -v ' +
-                    ' --cov=. ' +
-                    ' --cov-config .coveragerc' +
-                    ' --junitxml=xunit-reports/xunit-result.xml' +
-                    ' --cov-report xml:coverage-reports/coverage.xml' +
-                    ' --rootdir=.'
+                bat 'docker run --rm -v %CD%:c:/workspace -w c:/workspace python:3.7-windowsservercore-ltsc2016 runPython.bat'
                 bat '"C:\\Program Files\\Docker\\Docker\\DockerCli.exe" -SwitchLinuxEngine'
             }
         }

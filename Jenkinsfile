@@ -36,14 +36,16 @@ pipeline {
             }
             steps {
                 sh 'id'
+                //sh 'export PYTHONPATH=`pwd`/src:`pwd`/tests;' +
+                //    ' pip install pytest; ' +
+                //    ' pytest -v ' +
+                //    ' --cov=. ' +
+                //    ' --cov-config .coveragerc' +
+                //    ' --junitxml=xunit-reports/xunit-result-$(date +%Y-%m-%d_%H-%M-%S).xml' +
+                //    ' --cov-report xml:coverage-reports/coverage-$(date +%Y-%m-%d_%H-%M-%S).xml' +
+                //    ' --rootdir=. || true'
                 sh 'export PYTHONPATH=`pwd`/src:`pwd`/tests;' +
-                    ' pip install pytest; ' +
-                    ' pytest -v ' +
-                    ' --cov=. ' +
-                    ' --cov-config .coveragerc' +
-                    ' --junitxml=xunit-reports/xunit-result-$(date +%Y-%m-%d_%H-%M-%S).xml' +
-                    ' --cov-report xml:coverage-reports/coverage-$(date +%Y-%m-%d_%H-%M-%S).xml' +
-                    ' --rootdir=. || true'
+                        ' python src/calculator.py || true'
             }
         }
     }

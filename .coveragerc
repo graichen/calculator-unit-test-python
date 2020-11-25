@@ -1,0 +1,4 @@
+[run]
+omit =
+  ENV/lib/*
+  test/*
