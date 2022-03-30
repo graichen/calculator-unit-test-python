@@ -25,3 +25,4 @@ if __name__ == "__main__":
     print('12 - 3.5 = ', Calculator.minus(12, 3.5))
     print('525 / 25 = ', Calculator.divide(525, 25))
     print('17 * 3.14159 = ', Calculator.multiply(17, 3.14159))
+    print('53.22 - 69.32 = ', Calculator.minus(53.22, 69.32))
