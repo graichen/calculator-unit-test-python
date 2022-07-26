@@ -20,6 +20,9 @@ jobs:
       PYTHONPATH: "$GITHUB_WORKSPACE/src"
     steps:
     - uses: actions/checkout@v3
+    - name: Check environment
+      run: |
+        env
     - name: Set up Python 3.10
       uses: actions/setup-python@v3
       with:
